@@ -27,10 +27,10 @@ public class WorldController : MonoBehaviour {
 				if (gameMaze [x, y] == 0) {
 					if (tile_data.Type != Tile.TileType.Exit_Door) {
 						tile_data.Type = Tile.TileType.Floor;
-						tile_sr.sprite = MazeSprites [0];
+						tile_sr.sprite = MazeSprites [0]; // Place floor sprite
 					} else {
 						tile_go.AddComponent<BoxCollider2D>(); // Exit Door needs collider for trigger
-						tile_sr.sprite = MazeSprites [16];
+						tile_sr.sprite = MazeSprites [(int)Tile.TileType.Exit_Door];
 					}
 				} else {
 					int element = GetWallTile (world, x, y);

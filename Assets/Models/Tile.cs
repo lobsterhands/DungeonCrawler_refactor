@@ -8,7 +8,7 @@ public class Tile {
 	// Walls are ordered Up->Right->Down->Left; Wall_L means Up(0)->Right(0)->Down(0)->Left(1) => 0001 binary => 1 decimal
 	public enum TileType { Floor = 0, Wall_L = 1, Wall_D = 2, Wall_DL = 3, Wall_R = 4, Wall_RL = 5, 
 		Wall_RD = 6, Wall_RDL = 7, Wall_U = 8, Wall_UL = 9, Wall_UD = 10, 
-		Wall_UDL = 11, Wall_UR = 12, Wall_URL = 13, Wall_URD = 14, Exit_Door = 15 };
+		Wall_UDL = 11, Wall_UR = 12, Wall_URL = 13, Wall_URD = 14, Wall_URDL = 15, Exit_Door = 16 };
 	TileType type = TileType.Floor; // Default to floor
 
 	StaticObject staticObject;
