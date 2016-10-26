@@ -14,7 +14,7 @@ public class WorldController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		world = new World ();
-		gameMaze = generateMaze (world); // Create the maze; 0 = floor, 1 = wall; (pass world by reference)
+		gameMaze = generateMaze (world); // Create the maze; 0 = floor, 1 = wall;
 
 		for (int x = 0; x < world.Width; x++) {
 			for (int y = 0; y < world.Height; y++) {
@@ -25,8 +25,13 @@ public class WorldController : MonoBehaviour {
 				SpriteRenderer tile_sr = tile_go.AddComponent<SpriteRenderer> ();
 
 				if (gameMaze [x, y] == 0) {
-					tile_data.Type = Tile.TileType.Floor;
-					tile_sr.sprite = MazeSprites[0];
+					if (tile_data.Type != Tile.TileType.Exit_Door) {
+						tile_data.Type = Tile.TileType.Floor;
+						tile_sr.sprite = MazeSprites [0];
+					} else {
+						tile_go.AddComponent<BoxCollider2D>(); // Exit Door needs collider for trigger
+						tile_sr.sprite = MazeSprites [16];
+					}
 				} else {
 					int element = GetWallTile (world, x, y);
 					tile_data.Type = (Tile.TileType)element; // set TileType using a (cast)enum_integer
@@ -157,12 +162,32 @@ public class WorldController : MonoBehaviour {
 			else {
 				// Check for Outer Walls; these wall tiles with always fall in these coordinates
 				if (y == max_Y && x > 0 && x < max_X) { // It's a wall on the top row
+					if (gameMaze [x + 1, y] == 0) { // If a top wall has floor to the right or left, the floor is an exit
+						PlaceExitDoorAt (x + 1, y);
+					} else if (gameMaze [x - 1, y] == 0) {
+						PlaceExitDoorAt (x - 1, y);
+					}
 					return GetTileElement(0, gameMaze[x+1, y], gameMaze [x, y-1], gameMaze[x-1, y]);
 				} else if (x + 1 > max_X && y > 0 && y < max_Y) { // On right column
+					if (gameMaze [x, y + 1] == 0) {
+						PlaceExitDoorAt (x, y + 1);
+					} else if (gameMaze [x, y - 1] == 0) {
+						PlaceExitDoorAt (x, y - 1);
+					}
 					return GetTileElement(gameMaze [x, y+1], 0, gameMaze [x, y-1], gameMaze[x-1, y]);
 				} else if (y == 0 && x > 0 && x < max_X) { // On the bottom row
+					if (gameMaze [x + 1, y] == 0) {
+						PlaceExitDoorAt (x + 1, y);
+					} else if (gameMaze [x - 1, y] == 0) {
+						PlaceExitDoorAt (x - 1, y);
+					}
 					return GetTileElement(gameMaze [x, y+1], gameMaze [x+1, y], 0, gameMaze[x-1, y]);
 				}  else if (x - 1 < 0 && y > 0 && y < max_Y) { // On the left column
+					if (gameMaze [x, y + 1] == 0) {
+						PlaceExitDoorAt (x, y + 1);
+					} else if (gameMaze [x, y - 1] == 0) {
+						PlaceExitDoorAt (x, y - 1);
+					}
 					return GetTileElement(gameMaze [x, y+1], gameMaze [x+1, y], gameMaze[x, y-1], 0);
 				} // Done placing outer walls
 			}
@@ -176,5 +201,10 @@ public class WorldController : MonoBehaviour {
 	// Eg. Up = 1, Right = 0, Down = 0, Left = 0 ==> "1000"(binary) ==>  8(decimal)
 	int GetTileElement(int Up, int Right, int Down, int Left) {
 		return Convert.ToInt16 ((Up.ToString() + Right.ToString() + Down.ToString() + Left.ToString()), 2);
+	}
+
+	void PlaceExitDoorAt(int x, int y) {
+		Tile tile_data = world.GetTileAt (x, y);
+		tile_data.Type = Tile.TileType.Exit_Door;
 	}
 }
