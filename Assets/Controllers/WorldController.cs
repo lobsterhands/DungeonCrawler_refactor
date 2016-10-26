@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class WorldController : MonoBehaviour {
 
 	World world;
+
+
 	// 2-dimensional arrays to hold maze information
 	int[,] gameMaze; // Used in generateMaze(); @LYLE: Can these be condensed into 1 array?
 
@@ -206,5 +208,14 @@ public class WorldController : MonoBehaviour {
 	void PlaceExitDoorAt(int x, int y) {
 		Tile tile_data = world.GetTileAt (x, y);
 		tile_data.Type = Tile.TileType.Exit_Door;
+	}
+
+
+
+
+	public World getWorld {
+		get {
+			return world;
+		}
 	}
 }
