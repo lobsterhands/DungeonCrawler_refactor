@@ -28,17 +28,16 @@ public class WorldController : MonoBehaviour {
 					tile_data.Type = Tile.TileType.Floor;
 					tile_sr.sprite = MazeSprites[0];
 				} else {
-					int element = getWallTile (world, x, y);
+					int element = GetWallTile (world, x, y);
 					tile_data.Type = (Tile.TileType)element; // set TileType using a (cast)enum_integer
 					tile_go.AddComponent<BoxCollider2D>(); // Walls need to have a collider
-					if (element != -1) {
-						tile_sr.sprite = MazeSprites[element];
-					}
+					tile_sr.sprite = MazeSprites[element];
 				}
 			}
 		}
 	}
-		
+
+	// generateMaze() and recursion() were adapted from the following site: www.migapro.com/depth-first-search
 	public int[,] generateMaze(World world) {
 		int dimSquare = world.Width * world.Height;
 		int[,] mazeArray = new int[dimSquare, dimSquare];
@@ -140,47 +139,42 @@ public class WorldController : MonoBehaviour {
 	// an integer based on the binary sequence of a wall with those coordinates Up Right Down Left neighbors;
 	// 0 represents a floor; 1, a wall. Example: 0010 means a tile has a wall which connects to its Down direction.
 	// 0010 (base 2) turns into 2 (base 10)
-	int getWallTile(World world, int x, int y) {
+	int GetWallTile(World world, int x, int y) {
 		int max_X = world.Width-1;
 		int max_Y = world.Height-1;
 
-		string binary;
 		// Check for Corners and Outer Walls first; These tiles will always have these coordinates
-		if ((x == 0 || y == 0) || x == max_X || y == max_Y) { // 
+		if (x == 0 || y == 0 || x == max_X || y == max_Y) { // 
 			if (x == 0 && y == 0) { // Place bottom left corner
-				binary = gameMaze [ x, y+1].ToString() + gameMaze [x+1, y].ToString() + "00";
-				return Convert.ToInt16 (binary, 2); 
+				return GetTileElement (gameMaze [x, y + 1], gameMaze [x + 1, y], 0, 0);
 			} else if (x == max_X && y == 0) { // Place bottom right corner
-				binary = gameMaze [ x, y+1].ToString() + "00" + gameMaze [x-1, y].ToString();
-				return Convert.ToInt16 (binary, 2); 
+				return GetTileElement (gameMaze [x, y + 1], 0, 0, gameMaze [x - 1, y]);
 			} else if (x == 0 && y == max_Y) { // Place top left corner
-				binary = "0" + gameMaze [ x+1, y].ToString() + gameMaze [x, y-1].ToString() + 0;
-				return Convert.ToInt16 (binary, 2); } 
-			else if (x == max_X && y == max_Y) { // Place top right corner
-				binary = "00" + gameMaze [ x, y-1].ToString() + gameMaze [x-1, y].ToString();
-				return Convert.ToInt16 (binary, 2); 
+				return GetTileElement (0, gameMaze [x + 1, y], gameMaze [x, y - 1], 0);
+			} else if (x == max_X && y == max_Y) { // Place top right corner
+				return GetTileElement (0, 0, gameMaze [x, y - 1], gameMaze [x - 1, y]);
 			} // Done placing corners
-
-			// Check for Outer Walls; these wall tiles with always fall in these coordinates
-			if (y == max_Y && x > 0 && x < max_X) { // It's a wall on the top row
-				binary = "0" + gameMaze [ x+1, y].ToString() + gameMaze [x, y-1].ToString() + gameMaze[x-1, y].ToString();
-				return Convert.ToInt16 (binary, 2);
-			} else if (x + 1 > max_X && y > 0 && y < max_Y) { // On right column
-				binary =  gameMaze [ x, y+1].ToString() + "0" + gameMaze [x, y-1].ToString() + gameMaze[x-1, y].ToString();
-				return Convert.ToInt16 (binary, 2); 
-			} else if (y == 0 && x > 0 && x < max_X) { // On the bottom row
-				binary =  gameMaze [ x, y+1].ToString() + gameMaze [x+1, y].ToString() + "0" + gameMaze[x-1, y].ToString();
-				return Convert.ToInt16 (binary, 2); 
-			}  else if (x - 1 < 0 && y > 0 && y < max_Y) { // On the left column
-				binary =  gameMaze [ x, y+1].ToString() + gameMaze [x+1, y].ToString() + gameMaze[x, y-1].ToString() + "0";
-				return Convert.ToInt16 (binary, 2); 			
+			else {
+				// Check for Outer Walls; these wall tiles with always fall in these coordinates
+				if (y == max_Y && x > 0 && x < max_X) { // It's a wall on the top row
+					return GetTileElement(0, gameMaze[x+1, y], gameMaze [x, y-1], gameMaze[x-1, y]);
+				} else if (x + 1 > max_X && y > 0 && y < max_Y) { // On right column
+					return GetTileElement(gameMaze [x, y+1], 0, gameMaze [x, y-1], gameMaze[x-1, y]);
+				} else if (y == 0 && x > 0 && x < max_X) { // On the bottom row
+					return GetTileElement(gameMaze [x, y+1], gameMaze [x+1, y], 0, gameMaze[x-1, y]);
+				}  else if (x - 1 < 0 && y > 0 && y < max_Y) { // On the left column
+					return GetTileElement(gameMaze [x, y+1], gameMaze [x+1, y], gameMaze[x, y-1], 0);
+				} // Done placing outer walls
 			}
-		} // Done placing outer walls
-			
+		}
+
 		// Must be an inner wall piece; calculate which kind of wall by checking its URDL neighbors
-		binary = gameMaze [x, y + 1].ToString () + gameMaze [x + 1, y].ToString () +
-			gameMaze [x, y - 1].ToString () + gameMaze [x - 1, y].ToString ();
-		int elementNum = Convert.ToInt16 (binary, 2);
-		return elementNum;
+		return GetTileElement (gameMaze[x, y + 1], gameMaze [x + 1, y], gameMaze [x, y - 1], gameMaze [x - 1, y]);
+	} 
+
+	// Convert the values of a wall tiles neighbors to a binary string and then an integer based on that string
+	// Eg. Up = 1, Right = 0, Down = 0, Left = 0 ==> "1000"(binary) ==>  8(decimal)
+	int GetTileElement(int Up, int Right, int Down, int Left) {
+		return Convert.ToInt16 ((Up.ToString() + Right.ToString() + Down.ToString() + Left.ToString()), 2);
 	}
 }
