@@ -35,7 +35,7 @@ public class GenerateMonsters : MonoBehaviour {
 
 		//Min and Max x value for each monster
 		for (int i = 0; i < monstersX; i++) {
-			Debug.Log ("theWorld.Width: " + theWorld.Width);
+			Debug.Log ("theWorld.Width: " + theWorld.Width.ToString());
 			xMax [i] = theWorld.Width / monstersX * (i + 1);
 			xMin [i] = (theWorld.Width / monstersX * i);
 			Debug.Log ("xMax[i]: " + xMax[i]);
