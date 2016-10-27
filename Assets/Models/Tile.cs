@@ -11,6 +11,16 @@ public class Tile {
 		Wall_UDL = 11, Wall_UR = 12, Wall_URL = 13, Wall_URD = 14, Wall_URDL = 15, Exit_Door = 16 };
 	TileType type = TileType.Floor; // Default to floor
 
+
+	/* I want to use a callback that detects a change to a TileType.
+	 *  On TileTypeChange, update WorldController's view to match the new TileType.
+	 *  Exampe: Once I find the location for the exit door, I will do: tile_data.Type = Tile.TileType.Exit_Door;
+	 *  Inside that setter, I want to update the sprite adder inside the WC view
+	 * 
+	 * 
+	 * */
+	Action<Tile> cbTileTypeChanged;
+
 	StaticObject staticObject;
 
 	World world; // Store reference to the world since Tiles exist in a world; allows tile to be "self-aware"
@@ -43,6 +53,20 @@ public class Tile {
 		}
 		set {
 			type = value;
+			if (cbTileTypeChanged != null) {
+				// do the callback thing
+				cbTileTypeChanged (this); // pass this particular Tile to the callback
+			} else {
+				Debug.LogError ("cbTileTypeChanged is NULL");
+			}
 		}
+	}
+
+	public void RegisterTileTypeChangedCallBack(Action<Tile> callback) {
+		cbTileTypeChanged += callback;
+	}
+
+	public void UnRegisterTileTypeChangedCallBack(Action<Tile> callback) {
+		cbTileTypeChanged -= callback;
 	}
 }
