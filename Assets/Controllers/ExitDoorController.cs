@@ -12,9 +12,11 @@ public class ExitDoorController : MonoBehaviour {
 	void Update () {
 		
 	}
-
-	void OnMouseDown() {
-		Debug.Log ("Exit door clicked.");
-		Debug.Log ("Next step: Get the next level to load.");
+		
+	void OnTriggerEnter2D(Collider2D collider) {
+		if (collider.tag == "Player") {
+			Debug.Log ("Player found exit.");
+			Debug.Log ("Next step: Get the next level to load.");	
+		}
 	}
 }

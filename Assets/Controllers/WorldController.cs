@@ -11,7 +11,7 @@ public class WorldController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		world = new World ();
+		world = new World (7, 7); // If blank, dimensions are 33x33 by default
 		gameMaze = generateMaze (world); // Create the maze; 0 = floor, 1 = wall;
 
 		for (int x = 0; x < world.Width; x++) {

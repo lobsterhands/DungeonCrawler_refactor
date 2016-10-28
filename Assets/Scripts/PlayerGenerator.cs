@@ -15,7 +15,8 @@ public class PlayerGenerator : MonoBehaviour {
 		worldController = this.gameObject.GetComponent<WorldController>();
 		theWorld = worldController.getWorld;
 
-		Instantiate (player, new Vector2 (1, 1), Quaternion.identity);
+		GameObject Player = Instantiate (player, new Vector2 (1, 1), Quaternion.identity) as GameObject;
+		player.tag = "Player"; // Add tag to player for exit door trigger
 	}
 	
 	// Update is called once per frame
