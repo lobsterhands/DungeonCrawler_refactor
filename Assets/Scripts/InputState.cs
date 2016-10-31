@@ -11,13 +11,11 @@ public class InputState : MonoBehaviour {
 
 	private Dictionary<Buttons, ButtonState> buttonStates = new Dictionary<Buttons, ButtonState> ();
 
-
 	public void SetButtonValue(Buttons key, bool value){
 		if (!buttonStates.ContainsKey (key))
 			buttonStates.Add (key, new ButtonState());
 		var state = buttonStates [key];
 		if (state.value && !value) {
-			Debug.Log ("Button " + key + " released " + state.holdTime);
 			state.holdTime = 0;
 		} else if (state.value && value) {
 			state.holdTime += Time.deltaTime;
@@ -27,6 +25,7 @@ public class InputState : MonoBehaviour {
 	}
 
 	public bool GetButtonValue(Buttons key){
+		Debug.Log (buttonStates.Keys);
 		if (buttonStates.ContainsKey (key)) {
 			Debug.Log (buttonStates [key].value);
 			return buttonStates [key].value;

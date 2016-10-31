@@ -2,15 +2,13 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	public GameObject 
-
-	public float speed = 3f;
+	public float speed = 3.0f;
 	//float smooth = 0.05f; // used for camera lerp
 
 	// *new code invalving input scripts
 	public Buttons[] input;
 	private Rigidbody2D body2d;
-	private InputState InputState;
+	private InputState inputState;
 	// *
 
 	Animator animator;
@@ -62,11 +60,26 @@ public class PlayerController : MonoBehaviour {
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
 		//GetComponent<Rigidbody2D> ().velocity = movement * speed;
 
+		bool right = false;
+		bool left = false;
+		bool up = false;
+		bool down = false;
+
 		// *new code invalving input scripts
-		var up = inputState.GetButtonValue(input [0]);
-		var down = inputState.GetButtonValue(input [1]);
-		var left = inputState.GetButtonValue(input [2]);
-		var right = inputState.GetButtonValue(input [3]);
+		if (Input.GetAxis ("Horizontal") > 0) { // right
+			right = true;
+			inputState.GetButtonValue (Buttons.Right);
+		}
+		if (Input.GetAxis ("Horizontal") < 0) {
+			left = true;
+		}
+		if (Input.GetAxis ("Vertical") > 0) {
+			up = true;
+		}
+		if (Input.GetAxis ("Vertical") < 0) { // right
+			down = true;
+		}
+
 		var velX = speed;
 		var velY = speed;
 
@@ -78,14 +91,13 @@ public class PlayerController : MonoBehaviour {
 			velX = 0;
 		}
 		if (up || down) {
-			velY *= up ? -1 : 1;
+			velY *= down ? -1 : 1;
 		} else {
 			velY = 0;
 		}
 		//Debug.Log (velX + " " + velY);
 		GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
 		// *
-
 
 		gameObject.transform.rotation = Quaternion.Euler (0, 0, rotatePlayerX);
 		camera.transform.rotation = Quaternion.Euler (0, 0, 0); // Keep child-object camera from rotating
