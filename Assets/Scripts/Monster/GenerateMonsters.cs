@@ -36,16 +36,16 @@ public class GenerateMonsters : MonoBehaviour {
 		//Min and Max x value for each monster
 		for (int i = 0; i < monstersX; i++) {
 			Debug.Log ("theWorld.Width: " + theWorld.Width.ToString());
-			xMax [i] = theWorld.Width / monstersX * (i + 1);
-			xMin [i] = (theWorld.Width / monstersX * i);
+			xMax [i] = (theWorld.Width / monstersX * (i + 1)) - 2;
+			xMin [i] = (theWorld.Width / monstersX * i) + 2;
 			Debug.Log ("xMax[i]: " + xMax[i]);
 			Debug.Log ("xMin[i]: " + xMin[i]);
 		}
 
 		//Min and Max y value for each monster
 		for (int i = 0; i < monstersY; i++) {
-			yMax [i] = theWorld.Height/ monstersY * (i + 1);
-			yMin [i] = (theWorld.Height / monstersY * i); 
+			yMax [i] = (theWorld.Height/ monstersY * (i + 1)) - 2;
+			yMin [i] = (theWorld.Height / monstersY * i) + 2; 
 		}
 
 		// Instantiate monsters
