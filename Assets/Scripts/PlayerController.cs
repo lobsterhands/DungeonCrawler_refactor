@@ -55,7 +55,9 @@ public class PlayerController : MonoBehaviour {
 
 		animator.SetBool ("Running", running);
 		if (Input.GetKeyDown ("space")) {
-			animator.SetTrigger ("Attack");
+			//animator.SetBool ("Attack", true);
+			animator.Play("DungeonPlayerAttack", 0);
+			//Animator.Play("IdleAttack", 0, 0f);
 		}
 
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
