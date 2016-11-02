@@ -16,7 +16,7 @@ public class ExitDoorController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.tag == "Player") { // Down let wandering monsters trigger next level
 			Debug.Log ("Player found exit.");
-			Debug.Log ("Next step: Get the next level to load.");	
+			Debug.Log ("Next step: Get the next level to load.");
 		}
 	}
 }

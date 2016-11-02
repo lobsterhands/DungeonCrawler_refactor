@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
 		camera.transform.position = this.transform.position + new Vector3 (0f, 0f, -7.5f);
 		camera.transform.parent = this.transform;
+		camera.GetComponent<Camera> ().orthographicSize = 3.0f;
 
 		animator = GetComponent<Animator> ();
 
