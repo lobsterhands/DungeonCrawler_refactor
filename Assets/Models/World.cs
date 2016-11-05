@@ -7,7 +7,12 @@ public class World {
 	int width;
 	int height;
 
-	public World(int width = 33, int height = 33) {
+	public World(int width, int height) {
+
+		if (width == null || height == null) {
+			Debug.LogError ("No width or no height provided.");
+		}
+
 		this.width = width;
 		this.height = height;
 

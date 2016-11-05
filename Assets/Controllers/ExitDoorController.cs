@@ -1,22 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class ExitDoorController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-		
+	Action cbExitDoorReached;
+
 	void OnTriggerEnter2D(Collider2D collider) {
-		if (collider.tag == "Player") { // Down let wandering monsters trigger next level
-			Debug.Log ("Player found exit.");
-			Debug.Log ("Next step: Get the next level to load.");
+		if (cbExitDoorReached != null) {
+			cbExitDoorReached ();
+		} else{
+			Debug.LogError ("cbExitDoorReached is null.");
 		}
+	}
+
+	public void RegisterExitDoorReached(Action callback) {
+		cbExitDoorReached += callback;
 	}
 }
