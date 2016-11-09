@@ -6,8 +6,8 @@ public class GenerateMonsters : MonoBehaviour {
 	//The image of the monster
 	public GameObject[] monsters;
 
-	//how many monsters
-	public int numMonsters = 16;
+	//how many monsters... thisNum x thisNum tile area gets 1 monster
+	public int monsterDensity = 4;
 
 	//the maze that was created
 	private WorldController worldController;
@@ -22,8 +22,11 @@ public class GenerateMonsters : MonoBehaviour {
 		theWorld = worldController.getWorld;
 
 		//how many monsters and roughly where
-		int monstersX = Mathf.FloorToInt(numMonsters/3);//how many monsters accross
-		int monstersY = Mathf.FloorToInt(numMonsters/4);//how many monsters go up
+		int monstersX = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters accross
+		int monstersY = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters go up
+
+		Debug.Log ("monstersX: " + monstersX);
+		Debug.Log ("monstersY: " + monstersY);
 
 		int[] xMax = new int[monstersX];
 		int[] xMin = new int[monstersX];
@@ -40,7 +43,7 @@ public class GenerateMonsters : MonoBehaviour {
 			xMin [i] = (theWorld.Width / monstersX * i) + 2;
 			Debug.Log ("xMax[i]: " + xMax[i]);
 			Debug.Log ("xMin[i]: " + xMin[i]);
-		}
+		} 
 
 		//Min and Max y value for each monster
 		for (int i = 0; i < monstersY; i++) {
