@@ -9,7 +9,7 @@ public class World {
 
 	public World(int width, int height) {
 
-		if (width == null || height == null) {
+		if (width == 0 || height == 0) {
 			Debug.LogError ("No width or no height provided.");
 		}
 
