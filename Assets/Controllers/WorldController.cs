@@ -40,7 +40,6 @@ public class WorldController : MonoBehaviour {
 
 				// the TileTypeChanged callback updates the sprite as a tile's type is changed
 				tile_data.RegisterTileTypeChangedCallBack ( (tile) => {OnTileTypeChanged(tile, tile_go);} );
-				tile_data.UnRegisterTileTypeChangedCallBack ( (tile) => {OnTileTypeChanged(tile, tile_go);} );
 
 				if (maze [x, y] == 0) {
 					// Since the maze has an exit, if a floor tile lies on the outer edge, it's the exit
@@ -50,7 +49,6 @@ public class WorldController : MonoBehaviour {
 						bc.isTrigger = true; // The exit door will be a trigger to build a new world (or go to level 2)
 						ExitDoorController exit = tile_go.AddComponent<ExitDoorController>();
 						exit.RegisterExitDoorReached ( () => {OnExitDoorReached();} );
-						exit.UnRegisterExitDoorReached ( () => {OnExitDoorReached();} );
 
 						tile_go.tag = "ExitDoor";
 
