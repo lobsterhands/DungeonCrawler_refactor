@@ -127,6 +127,10 @@ public class WorldController : MonoBehaviour {
 		height = width;
 		world = CreateWorld (width, height);
 		gameMaze = CreateMaze (world);
+
+		//generate new monsters
+		GenerateMonsters genMonsters;
+		genMonsters.startGeneration();
 	}
 
 	public World getWorld {

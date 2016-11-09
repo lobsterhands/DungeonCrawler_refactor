@@ -7,7 +7,8 @@ public class GenerateMonsters : MonoBehaviour {
 	public GameObject[] monsters;
 
 	//how many monsters... thisNum x thisNum tile area gets 1 monster
-	public int monsterDensity = 4;
+	public float monsterDensity = 4;
+	public float monsterDensityModifier = 0.97f; 
 
 	//the maze that was created
 	private WorldController worldController;
@@ -18,8 +19,14 @@ public class GenerateMonsters : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//find the maze generation script and get the board size
-		worldController = this.gameObject.GetComponent<WorldController>();
+		worldController = gameObject.GetComponent<WorldController>();
 		theWorld = worldController.getWorld;
+
+		startGeneration ();
+	}//Start
+
+	public void startGeneration(){
+		//theWorld = worldController.getWorld;
 
 		//how many monsters and roughly where
 		int monstersX = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters accross
@@ -71,9 +78,7 @@ public class GenerateMonsters : MonoBehaviour {
 				Instantiate (monsters [whichMonster], instPos, Quaternion.Euler (0, 180, 0));
 			}
 		}
-
-
-	}//Start
+	}//startGeneration()
 
 
 	int genMonsterRand(int minPoint, int maxPoint){
