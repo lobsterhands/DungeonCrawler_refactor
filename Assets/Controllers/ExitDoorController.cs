@@ -17,4 +17,8 @@ public class ExitDoorController : MonoBehaviour {
 	public void RegisterExitDoorReached(Action callback) {
 		cbExitDoorReached += callback;
 	}
+
+	public void UnRegisterExitDoorReached(Action callback) {
+		cbExitDoorReached -= callback;
+	}
 }
