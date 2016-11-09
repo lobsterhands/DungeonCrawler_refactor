@@ -14,7 +14,16 @@ public class GenerateMonsters : MonoBehaviour {
 	private WorldController worldController;
 	private World theWorld;
 
-	
+
+
+	//This changes the scale to the set number.  can be modifed to change
+	// off of a multiplier
+	//monster.transform.localScale = new Vector3(1.5f,1.5f,1.5f);
+
+
+
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -26,41 +35,42 @@ public class GenerateMonsters : MonoBehaviour {
 	}//Start
 
 	public void startGeneration(){
-		//theWorld = worldController.getWorld;
+		theWorld = worldController.getWorld;
 
 		//how many monsters and roughly where
-		int monstersX = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters accross
-		int monstersY = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters go up
+		int numMons = Mathf.FloorToInt((theWorld.Width+1)/monsterDensity);//how many monsters accross
+		//int monstersX = Mathf.FloorToInt((theWorld.Width+1)/monsterDensity);//how many monsters accross
+		//int monstersY = Mathf.FloorToInt(theWorld.Width/monsterDensity);//how many monsters go up
 
-		Debug.Log ("monstersX: " + monstersX);
-		Debug.Log ("monstersY: " + monstersY);
+		Debug.Log ("monstersX: " + numMons);
+		Debug.Log ("monstersY: " + numMons);
 
-		int[] xMax = new int[monstersX];
-		int[] xMin = new int[monstersX];
-		int[] yMax = new int[monstersY];
-		int[] yMin = new int[monstersY];
+		int[] xMax = new int[numMons];
+		int[] xMin = new int[numMons];
+		int[] yMax = new int[numMons];
+		int[] yMin = new int[numMons];
 
-		Debug.Log ("monstersX: " + monstersX);
+		Debug.Log ("monstersX: " + numMons);
 		Debug.Log ("xMax.length: " + xMax.Length);
 
 		//Min and Max x value for each monster
-		for (int i = 0; i < monstersX; i++) {
+		for (int i = 0; i < numMons; i++) {
 			Debug.Log ("theWorld.Width: " + theWorld.Width.ToString());
-			xMax [i] = (theWorld.Width / monstersX * (i + 1)) - 2;
-			xMin [i] = (theWorld.Width / monstersX * i) + 2;
+			xMax [i] = (theWorld.Width / numMons * (i + 1)) - 2;
+			xMin [i] = (theWorld.Width / numMons * i) + 2;
 			Debug.Log ("xMax[i]: " + xMax[i]);
 			Debug.Log ("xMin[i]: " + xMin[i]);
 		} 
 
 		//Min and Max y value for each monster
-		for (int i = 0; i < monstersY; i++) {
-			yMax [i] = (theWorld.Height/ monstersY * (i + 1)) - 2;
-			yMin [i] = (theWorld.Height / monstersY * i) + 2; 
+		for (int i = 0; i < numMons; i++) {
+			yMax [i] = (theWorld.Height/ numMons * (i + 1)) - 2;
+			yMin [i] = (theWorld.Height / numMons * i) + 2; 
 		}
 
 		// Instantiate monsters
-		for (int i = 0; i < monstersX; i++) {
-			for (int j = 0; j < monstersY; j++) {
+		for (int i = 0; i < numMons; i++) {
+			for (int j = 0; j < numMons; j++) {
 				//Debug.Log ("i = " + i + ", j = " + j);
 				//Debug.Log ("xMin = " + xMin[i] + ", xMax = " + xMax[i]);
 				//Debug.Log ("yMin = " + yMin[j] + ", yMax = " + yMax[j]);

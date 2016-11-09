@@ -128,8 +128,14 @@ public class WorldController : MonoBehaviour {
 		world = CreateWorld (width, height);
 		gameMaze = CreateMaze (world);
 
+		//Destroy old monsters still living
+		GameObject[] survivingMonsters = GameObject.FindGameObjectsWithTag("Enemy");
+		foreach (GameObject monster in survivingMonsters) {
+			Destroy (monster);
+		}
+
 		//generate new monsters
-		GenerateMonsters genMonsters;
+		GenerateMonsters genMonsters = gameObject.GetComponent<GenerateMonsters>();
 		genMonsters.startGeneration();
 	}
 
