@@ -36,7 +36,8 @@ public class WorldController : MonoBehaviour {
 				tile_go.transform.SetParent (tileHolder.transform); // Put tile under WorldController's hiearchy
 				tile_go.name = "Tile_" + x + "_" + y;
 				tile_go.transform.position = new Vector3 (x, y, 0);
-				SpriteRenderer tile_sr = tile_go.AddComponent<SpriteRenderer> ();
+				//SpriteRenderer tile_sr = 
+				tile_go.AddComponent<SpriteRenderer> ();
 
 				// the TileTypeChanged callback updates the sprite as a tile's type is changed
 				tile_data.RegisterTileTypeChangedCallBack ( (tile) => {OnTileTypeChanged(tile, tile_go);} );
@@ -128,6 +129,16 @@ public class WorldController : MonoBehaviour {
 		height = width;
 		world = CreateWorld (width, height);
 		gameMaze = CreateMaze (world);
+
+		//Destroy old monsters still living
+		GameObject[] survivingMonsters = GameObject.FindGameObjectsWithTag("Enemy");
+		foreach (GameObject monster in survivingMonsters) {
+			Destroy (monster);
+		}
+
+		//generate new monsters
+		GenerateMonsters genMonsters = gameObject.GetComponent<GenerateMonsters>();
+		genMonsters.startGeneration();
 	}
 
 	public World getWorld {

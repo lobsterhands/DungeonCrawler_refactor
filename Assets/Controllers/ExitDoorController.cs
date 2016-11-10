@@ -7,10 +7,12 @@ public class ExitDoorController : MonoBehaviour {
 	Action cbExitDoorReached;
 
 	void OnTriggerEnter2D(Collider2D collider) {
-		if (cbExitDoorReached != null) {
-			cbExitDoorReached ();
-		} else{
-			Debug.LogError ("cbExitDoorReached is null.");
+		if (collider.tag == "Player") {
+			if (cbExitDoorReached != null) {
+				cbExitDoorReached ();
+			} else {
+				Debug.LogError ("cbExitDoorReached is null.");
+			}
 		}
 	}
 

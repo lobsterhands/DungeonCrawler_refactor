@@ -25,9 +25,9 @@ public class InputState : MonoBehaviour {
 	}
 
 	public bool GetButtonValue(Buttons key){
-		Debug.Log (buttonStates.Keys);
+		//Debug.Log (buttonStates.Keys);
 		if (buttonStates.ContainsKey (key)) {
-			Debug.Log (buttonStates [key].value);
+			//Debug.Log (buttonStates [key].value);
 			return buttonStates [key].value;
 		}
 		else
