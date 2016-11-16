@@ -53,7 +53,7 @@ public class Attack : MonoBehaviour {
 	void FixedUpdate () {
 		if (isAttacking) {
 			attackTimer += Time.deltaTime;
-			if (attackTimer > .5f) {
+			if (attackTimer > .4f) {
 				isAttacking = false;
 			}
 		}
