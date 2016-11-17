@@ -29,6 +29,7 @@ public class MonsterController : MonoBehaviour {
 		if (moving) {
 			timeToMoveCounter -= Time.deltaTime;
 			myRidgidbody.velocity = moveDirection;
+			this.GetComponent<Animation> ().Play ("attack1");
 
 			if (timeToMoveCounter < 0f) {
 				moving = false;

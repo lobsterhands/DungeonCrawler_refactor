@@ -132,6 +132,7 @@ public class WorldController : MonoBehaviour {
 		//Destroy old monsters still living
 		GameObject[] survivingMonsters = GameObject.FindGameObjectsWithTag("Enemy");
 		foreach (GameObject monster in survivingMonsters) {
+			
 			Destroy (monster);
 		}
 
