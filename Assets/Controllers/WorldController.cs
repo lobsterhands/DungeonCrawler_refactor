@@ -47,9 +47,10 @@ public class WorldController : MonoBehaviour {
 					if (x == 0 || x == world.Width-1 || y == 0 || y == world.Height-1) {
 						tile_data.Type = Tile.TileType.Exit_Door;
 						BoxCollider2D bc = tile_go.AddComponent <BoxCollider2D> ();
-						bc.isTrigger = true; // The exit door will be a trigger to build a new world (or go to level 2)
+						//bc.isTrigger = true; // The exit door will be a trigger to build a new world (or go to level 2)
 						ExitDoorController exit = tile_go.AddComponent<ExitDoorController>();
 						exit.RegisterExitDoorReached ( () => {OnExitDoorReached();} );
+
 						tile_go.tag = "ExitDoor";
 
 					} else {

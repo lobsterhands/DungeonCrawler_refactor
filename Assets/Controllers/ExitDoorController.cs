@@ -3,11 +3,12 @@ using System.Collections;
 using System;
 
 public class ExitDoorController : MonoBehaviour {
-
 	Action cbExitDoorReached;
-
-	void OnTriggerEnter2D(Collider2D collider) {
-		if (collider.tag == "Player") {
+			
+	void OnCollisionEnter2D(Collision2D collider) {
+		Debug.Log ("Collision enter");
+		Debug.Log (collider.gameObject.tag);
+		if (collider.gameObject.tag == "Player") {
 			if (cbExitDoorReached != null) {
 				cbExitDoorReached ();
 			} else {
@@ -18,5 +19,9 @@ public class ExitDoorController : MonoBehaviour {
 
 	public void RegisterExitDoorReached(Action callback) {
 		cbExitDoorReached += callback;
+	}
+
+	public void UnRegisterExitDoorReached(Action callback) {
+		cbExitDoorReached -= callback;
 	}
 }
