@@ -1,10 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	public float speed = 3.0f;
 	//float smooth = 0.05f; // used for camera lerp
 
+	//stats for player
+	public float speed = 3.0f;
+	public float max_speed = 6.0f; // max speed is really 5
+	//health
+	public float start_health = 5.0f;
+	public float current_health;
+	public Slider health_slider;
+	public float max_health = 5.0f;
+	//armor
+	public float start_armor = 0.0f;
+	public float current_armor;
+	public Slider armor_slider;
+	public float max_armor = 3.0f;
 	// *new code invalving input scripts
 	public Buttons[] input;
 	private Rigidbody2D body2d;
@@ -17,23 +30,24 @@ public class PlayerController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
 		camera.transform.position = this.transform.position + new Vector3 (0f, 0f, -7.5f);
 		camera.transform.parent = this.transform;
-		camera.GetComponent<Camera> ().orthographicSize = 3.0f;
 
 		animator = GetComponent<Animator> ();
 
 		// *new code invalving input scripts
 		body2d = GetComponent<Rigidbody2D> ();
 		inputState = GetComponent<InputState> ();
+		current_health = start_health;
+		current_armor = start_armor;
 		// *
 	}
 
 	float rotatePlayerX = 0F;
 	void FixedUpdate () {
-	
+
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
 
@@ -54,11 +68,9 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		animator.SetBool ("Running", running);
-		//if (Input.GetKeyDown ("space")) {
-			//animator.SetBool ("Attack", true);
-			//animator.Play("DungeonPlayerAttack", 0);
-			//Animator.Play("IdleAttack", 0, 0f);
-		//}
+		if (Input.GetKeyDown ("space")) {
+			animator.SetTrigger ("Attack");
+		}
 
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
 		//GetComponent<Rigidbody2D> ().velocity = movement * speed;
@@ -104,5 +116,31 @@ public class PlayerController : MonoBehaviour {
 
 		gameObject.transform.rotation = Quaternion.Euler (0, 0, rotatePlayerX);
 		camera.transform.rotation = Quaternion.Euler (0, 0, 0); // Keep child-object camera from rotating
+	}
+
+	//collision checking
+	void  OnTriggerEnter2D(Collider2D other)
+	{
+		switch(other.gameObject.tag)
+		{
+		case "Speed_Boost":
+			other.gameObject.SetActive (false);
+			speed += 1.0f;
+			if (speed < max_speed)
+				speed += 1.0f;
+			break;
+		case "Health":
+			other.gameObject.SetActive(false);
+			if(current_health <= max_health)
+				current_health += 1.0f;
+
+			break;
+		case "Armor":
+			other.gameObject.SetActive(false);
+			if(current_armor <= max_armor)
+				current_armor += 1.0f;
+			break;
+
+		}
 	}
 }
