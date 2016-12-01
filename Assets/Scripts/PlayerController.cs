@@ -68,9 +68,9 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		animator.SetBool ("Running", running);
-		if (Input.GetKeyDown ("space")) {
-			animator.SetTrigger ("Attack");
-		}
+		//if (Input.GetKeyDown ("space")) {
+		//	animator.SetTrigger ("Attack");
+		//}
 
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
 		//GetComponent<Rigidbody2D> ().velocity = movement * speed;

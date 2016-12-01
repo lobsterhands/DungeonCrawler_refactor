@@ -4,6 +4,7 @@ using System.Collections;
 public class PickUp : MonoBehaviour {
 
 	public GameObject[] pickUps;
+
 	float[] probabilities = { 65f /*health*/, 30f /*armor*/, 5f /*power up*/ };
 
 	public float pickupDensity = 2f;
@@ -22,26 +23,29 @@ public class PickUp : MonoBehaviour {
 	}
 
 	public void startGeneration() {
-		int numPickups = Mathf.FloorToInt((theWorld.Width+1)/pickupDensity);//how many monsters accross
+		int numPickups = Mathf.FloorToInt((theWorld.Width+1)/pickupDensity); // Calc number pickUps
+		Debug.Log("NUM PICKUPS: " + numPickups);
 
-		for (int x = 1; x < theWorld.Width; x++) {
-			for (int y = 1; y < theWorld.Height; y++) {
+		for (int x = 1; x < theWorld.Width; ++x) {
+			for (int y = 1; y < theWorld.Height; ++y) {
 
 				if (x == 1 && y == 1) {
 					continue;
 				}
 
+				if (theWorld.GetTileAt (x, y).Type == Tile.TileType.Floor && theWorld.GetTileAt(x,y).IsDeadEnd) {
 
-				if (theWorld.GetTileAt (x, y).Type == 0 && theWorld.GetTileAt(x,y).IsDeadEnd) {
+					Debug.Log ("Tile x: " + x + " y: " + y + " is a DeadEnd");
 
 					for (int i = 0; i < numPickups; i++) {
 						int element = chooseRandom (probabilities);
 						Instantiate (pickUps [element], new Vector2 (x, y), Quaternion.identity); 
-						Debug.Log ("INSTANT");
+						Debug.Log ("Creating PickUp at x: " + x + " y: " + y);
 					}				
 				}
 			}
 		}
+		pickupDensity -= pickupDensityModifier; // Density (and numPickups) will be higher next level
 	}
 
 	int chooseRandom (float[] probs) {

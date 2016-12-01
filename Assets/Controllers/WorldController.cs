@@ -29,9 +29,10 @@ public class WorldController : MonoBehaviour {
 	int[,] CreateMaze(World world) {
 		int[,] maze = generateMaze (world); // Create the maze; 0 = floor, 1 = wall;
 
-		for (int x = 0; x < world.Width; x++) {
-			for (int y = 0; y < world.Height; y++) {
+		for (int x = 0; x < world.Width; ++x) {
+			for (int y = 0; y < world.Height; ++y) {
 				Tile tile_data = world.GetTileAt (x, y);
+
 				GameObject tile_go = new GameObject ();
 				tile_go.transform.SetParent (tileHolder.transform); // Put tile under WorldController's hiearchy
 				tile_go.name = "Tile_" + x + "_" + y;
@@ -63,12 +64,18 @@ public class WorldController : MonoBehaviour {
 						int element = GetWallTile (world, maze, x, y);
 						if (element == 7 || element == 11 || element == 13 || element == 15) {
 							tile_data.IsDeadEnd = true;
+							Debug.Log("Setting x: " + x + " y: " + y + " to DEAD END");
 						}
 					}
 				} else {
 					tile_go.AddComponent<BoxCollider2D>(); // Walls need to have a collider
 					int element = GetWallTile (world, maze, x, y);
 					tile_data.Type = (Tile.TileType)element; // set TileType using a (cast)enum_integer
+				}
+
+
+				if (tile_data.IsDeadEnd) {
+					Debug.Log ("DEADEND AT X: " + x + " Y: " + y);
 				}
 			}
 		}
