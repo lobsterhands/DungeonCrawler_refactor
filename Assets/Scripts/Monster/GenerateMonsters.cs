@@ -21,10 +21,6 @@ public class GenerateMonsters : MonoBehaviour {
 	//monster.transform.localScale = new Vector3(1.5f,1.5f,1.5f);
 
 
-
-
-
-
 	// Use this for initialization
 	void Start () {
 		//find the maze generation script and get the board size

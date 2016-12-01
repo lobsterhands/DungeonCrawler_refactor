@@ -43,6 +43,9 @@ public class WorldController : MonoBehaviour {
 				tile_data.RegisterTileTypeChangedCallBack ( (tile) => {OnTileTypeChanged(tile, tile_go);} );
 
 				if (maze [x, y] == 0) {
+
+
+
 					// Since the maze has an exit, if a floor tile lies on the outer edge, it's the exit
 					if (x == 0 || x == world.Width-1 || y == 0 || y == world.Height-1) {
 						tile_data.Type = Tile.TileType.Exit_Door;
@@ -53,9 +56,14 @@ public class WorldController : MonoBehaviour {
 
 						tile_go.tag = "ExitDoor";
 
+
 					} else {
 						Destroy ( tile_go.GetComponent<BoxCollider2D>() ); 
 						tile_data.Type = Tile.TileType.Floor;
+						int element = GetWallTile (world, maze, x, y);
+						if (element == 7 || element == 11 || element == 13 || element == 15) {
+							tile_data.IsDeadEnd = true;
+						}
 					}
 				} else {
 					tile_go.AddComponent<BoxCollider2D>(); // Walls need to have a collider
@@ -112,7 +120,7 @@ public class WorldController : MonoBehaviour {
 
 	// Convert the values of a wall tiles neighbors to a binary string and then an integer based on that string
 	// Eg. Up = 1, Right = 0, Down = 0, Left = 0 ==> "1000"(binary) ==>  8(decimal)
-	int GetTileElement(int Up, int Right, int Down, int Left) {
+	public int GetTileElement(int Up, int Right, int Down, int Left) {
 		return Convert.ToInt16 ((Up.ToString() + Right.ToString() + Down.ToString() + Left.ToString()), 2);
 	}
 
@@ -137,9 +145,29 @@ public class WorldController : MonoBehaviour {
 			Destroy (monster);
 		}
 
+		// Destroy old health pots
+		GameObject[] survivingHealth = GameObject.FindGameObjectsWithTag ("Health");
+		foreach (GameObject health in survivingHealth) {
+			Destroy (health);
+		}
+
+		GameObject[] survivingArmor = GameObject.FindGameObjectsWithTag ("Armor");
+		foreach (GameObject armor in survivingArmor) {
+			Destroy (armor);
+		}
+
+		GameObject[] survivingSpeed= GameObject.FindGameObjectsWithTag ("Speed_Boost");
+		foreach (GameObject speed in survivingSpeed) {
+			Destroy (speed);
+		}
+
 		//generate new monsters
 		GenerateMonsters genMonsters = gameObject.GetComponent<GenerateMonsters>();
 		genMonsters.startGeneration();
+
+		//generate new monsters
+		PickUp pickup = gameObject.GetComponent<PickUp>();
+		pickup.startGeneration();
 	}
 
 	public World getWorld {
