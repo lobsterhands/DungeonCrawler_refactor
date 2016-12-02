@@ -6,7 +6,6 @@ public class ExitDoorController : MonoBehaviour {
 	Action cbExitDoorReached;
 			
 	void OnCollisionEnter2D(Collision2D collider) {
-		Debug.Log ("Collision enter");
 		Debug.Log (collider.gameObject.tag);
 		if (collider.gameObject.tag == "Player") {
 			if (cbExitDoorReached != null) {

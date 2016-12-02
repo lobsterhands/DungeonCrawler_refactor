@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class PickUp : MonoBehaviour {
 
 	public GameObject[] pickUps;
 
-	float[] probabilities = { 65f /*health*/, 30f /*armor*/, 5f /*power up*/ };
+	float[] probabilities = { 65f /*health*/, 30f /*armor*/, 5f /*speed boost*/ };
 
-	public float pickupDensity = 2f;
-	public float pickupDensityModifier = 0.97f; 
+	public float pickupDensity = 1.4f; 
 
 	private WorldController worldController;
 	private World theWorld;
@@ -18,34 +19,42 @@ public class PickUp : MonoBehaviour {
 		//find the maze generation script and get the board size
 		worldController = gameObject.GetComponent<WorldController>();
 		theWorld = worldController.getWorld;
-
-		startGeneration();
 	}
 
-	public void startGeneration() {
-		int numPickups = Mathf.FloorToInt((theWorld.Width+1)/pickupDensity); // Calc number pickUps
-		Debug.Log("NUM PICKUPS: " + numPickups);
+	public void generatePickups() {
+		int numDeadEnds = worldController.deadEndLocations.Count;
+		Debug.Log("Num deadEnds: " + numDeadEnds);
 
-		for (int x = 1; x < theWorld.Width; ++x) {
-			for (int y = 1; y < theWorld.Height; ++y) {
+		int numPickups = Mathf.FloorToInt((numDeadEnds)/pickupDensity); // Calc number pickUps
+		Debug.Log("Num pickups: " + numPickups);
 
-				if (x == 1 && y == 1) {
-					continue;
-				}
+		List<Vector2> randPos = chooseRandomPos (numPickups, numDeadEnds);
+		for (int i = 0; i < numPickups; i++) {
+			int element = chooseRandom (probabilities);
+			Instantiate (pickUps [element], new Vector2 (randPos [i].x, randPos [i].y), Quaternion.identity);
+		}
+	}
 
-				if (theWorld.GetTileAt (x, y).Type == Tile.TileType.Floor && theWorld.GetTileAt(x,y).IsDeadEnd) {
+	List<Vector2> chooseRandomPos(int nPickups, int nDeadEnds) {
+		List<Vector2> result = new List<Vector2> ();
 
-					Debug.Log ("Tile x: " + x + " y: " + y + " is a DeadEnd");
+		int numToChoose = nPickups;
 
-					for (int i = 0; i < numPickups; i++) {
-						int element = chooseRandom (probabilities);
-						Instantiate (pickUps [element], new Vector2 (x, y), Quaternion.identity); 
-						Debug.Log ("Creating PickUp at x: " + x + " y: " + y);
-					}				
+		for (int numLeft = nDeadEnds; numLeft > 0; numLeft--) {
+
+			float prob = (float)numToChoose/(float)numLeft;
+
+			if (Random.value <= prob) {
+				numToChoose--;
+				result.Add(worldController.deadEndLocations[numLeft - 1]);
+
+				if (numToChoose == 0) {
+					break;
 				}
 			}
 		}
-		pickupDensity -= pickupDensityModifier; // Density (and numPickups) will be higher next level
+
+		return result;
 	}
 
 	int chooseRandom (float[] probs) {

@@ -26,7 +26,6 @@ public class GenerateMonsters : MonoBehaviour {
 		//find the maze generation script and get the board size
 		worldController = gameObject.GetComponent<WorldController>();
 		theWorld = worldController.getWorld;
-
 		startGeneration ();
 	}//Start
 

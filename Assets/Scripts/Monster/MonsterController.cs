@@ -136,7 +136,6 @@ public class MonsterController : MonoBehaviour {
 		
 		if (coll.transform.tag == "Player" && timeBetweenAttackCounter == 0.0f) 
 		{
-			Debug.Log ("collided with: " + coll.transform.name);
 			myAttakAnimController.Play ("attack1");
 
 			timeBetweenAttackCounter = Random.Range (0.75f, 1.25f);

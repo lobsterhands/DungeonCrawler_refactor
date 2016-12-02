@@ -10,6 +10,8 @@ public class WorldController : MonoBehaviour {
 
 	GameObject tileHolder;
 
+	public List<Vector2> deadEndLocations;
+
 	int width = 7;
 	int height = 7;
 
@@ -23,6 +25,7 @@ public class WorldController : MonoBehaviour {
 
 	World CreateWorld(int width, int height) {
 		world = new World (width, height); // If blank, dimensions are 33x33 by default
+		deadEndLocations = new List<Vector2>();
 		return world;
 	}
 
@@ -45,8 +48,6 @@ public class WorldController : MonoBehaviour {
 
 				if (maze [x, y] == 0) {
 
-
-
 					// Since the maze has an exit, if a floor tile lies on the outer edge, it's the exit
 					if (x == 0 || x == world.Width-1 || y == 0 || y == world.Height-1) {
 						tile_data.Type = Tile.TileType.Exit_Door;
@@ -62,9 +63,8 @@ public class WorldController : MonoBehaviour {
 						Destroy ( tile_go.GetComponent<BoxCollider2D>() ); 
 						tile_data.Type = Tile.TileType.Floor;
 						int element = GetWallTile (world, maze, x, y);
-						if (element == 7 || element == 11 || element == 13 || element == 15) {
-							tile_data.IsDeadEnd = true;
-							Debug.Log("Setting x: " + x + " y: " + y + " to DEAD END");
+						if (element == 7 || element == 11 || element == 13 || element == 14) {
+							deadEndLocations.Add (new Vector2 (x, y));
 						}
 					}
 				} else {
@@ -72,12 +72,10 @@ public class WorldController : MonoBehaviour {
 					int element = GetWallTile (world, maze, x, y);
 					tile_data.Type = (Tile.TileType)element; // set TileType using a (cast)enum_integer
 				}
-
-
-				if (tile_data.IsDeadEnd) {
-					Debug.Log ("DEADEND AT X: " + x + " Y: " + y);
-				}
 			}
+		}
+		for (int i = 0; i < deadEndLocations.Count; ++i) {
+			Debug.Log (deadEndLocations [i]);
 		}
 		return maze;
 	}
@@ -174,7 +172,7 @@ public class WorldController : MonoBehaviour {
 
 		//generate new monsters
 		PickUp pickup = gameObject.GetComponent<PickUp>();
-		pickup.startGeneration();
+		pickup.generatePickups();
 	}
 
 	public World getWorld {
