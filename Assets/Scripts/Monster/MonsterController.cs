@@ -93,6 +93,7 @@ public class MonsterController : MonoBehaviour {
 			}//if (timeBetweenMove < 0f)
 		}//else //Not moving
 
+		Physics2D.IgnoreLayerCollision (2, 8);
 
 	}//Update
 
