@@ -90,6 +90,12 @@ public class MonsterController : MonoBehaviour {
 					moveDirection = new Vector3 (Random.Range(-1f,1f)*moveSpeed,Random.Range(-1f,1f)*moveSpeed,0);
 				}
 
+				Vector3 lookdir = moveDirection;
+				lookdir.Normalize ();
+				float rotdir = Mathf.Atan2 (lookdir.z, lookdir.x) * Mathf.Rad2Deg;
+				this.transform.rotation = Quaternion.Euler (0f, rotdir+45, 0f);
+
+
 			}//if (timeBetweenMove < 0f)
 		}//else //Not moving
 
