@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour {
 	void Update() {
 		UI_sliders [0].value = current_health;
 		UI_sliders [1].value = current_armor;
+		UI_texts [0].text = "Level: " + playerOnLevel;
 	}
 
 	void FixedUpdate () {
