@@ -5,7 +5,10 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	//float smooth = 0.05f; // used for camera lerp
 
+	Slider[] UI_sliders;
+	Text[] UI_texts;
 
+	int playerOnLevel; // Current level player is on
 	public GameObject HUD;
 	public Slider Health_UI;
 	//stats for player
@@ -32,9 +35,14 @@ public class PlayerController : MonoBehaviour {
 	new public GameObject health_bar;
 	// Use this for initialization
 	void Start () {
+		Debug.Log ("Caller: " + this.gameObject);
+		playerOnLevel = 1;
 		//
 		HUD = GameObject.FindGameObjectWithTag ("HUD");
-		Health_UI = HUD.gameObject.GetComponentInChildren<Slider> ();
+		//Health_UI = HUD.gameObject.GetComponentInChildren<Slider> ();
+		UI_sliders = HUD.gameObject.GetComponentsInChildren<Slider> (); // UI_sliders[0] = health; [1] = armor
+		UI_texts = HUD.gameObject.GetComponentsInChildren<Text> (); // UI_texts[0] = Level;
+
 		//
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
 		//health_slider = GameObject.FindGameObjectWithTag ("health_slider") as Slider;
@@ -45,15 +53,21 @@ public class PlayerController : MonoBehaviour {
 		// *new code invalving input scripts
 		body2d = GetComponent<Rigidbody2D> ();
 		inputState = GetComponent<InputState> ();
-		current_health = start_health;
+		current_health = start_health-2;
 		//health_slider.value = current_health;
-		Health_UI.value = current_health;
+		// Health_UI.value = current_health;
 		current_armor = start_armor;
 		armor_slider.value = current_armor;
 		// *
 	}
 
 	float rotatePlayerX = 0F;
+
+	void Update() {
+		UI_sliders [0].value = current_health;
+		UI_sliders [1].value = current_armor;
+	}
+
 	void FixedUpdate () {
 
 		float moveHorizontal = Input.GetAxis ("Horizontal");
@@ -78,7 +92,7 @@ public class PlayerController : MonoBehaviour {
 
 		//animator.SetBool ("Running", running);
 		if (Input.GetKeyDown ("space")) {
-			animator.SetTrigger ("Attack");
+//			animator.SetTrigger ("Attack");
 		}
 
 		//Vector3 movement = new Vector3 (moveHorizontal, moveVertical, 0.0f);
@@ -120,7 +134,7 @@ public class PlayerController : MonoBehaviour {
 			velY = 0;
 		}
 		//Debug.Log (velX + " " + velY);
-		GetComponent<Rigidbody2D> ().velocity = new Vector2(velX, velY);
+		body2d.velocity = new Vector2(velX, velY);
 		// *
 
 		gameObject.transform.rotation = Quaternion.Euler (0, 0, rotatePlayerX);
@@ -128,13 +142,13 @@ public class PlayerController : MonoBehaviour {
 	}
 	void change_HP(float change)
 	{
-		
 		current_health += change;
 		Health_UI.value = current_health;
 		//health_slider.value = current_health;
 		if (current_health > max_health)
 			current_health = 5.0f;
 	}
+
 	//collision checking
 	void  OnTriggerEnter2D(Collider2D other)
 	{
@@ -148,6 +162,8 @@ public class PlayerController : MonoBehaviour {
 			break;
 		case "Health":
 			other.gameObject.SetActive (false);
+			if (current_health == max_health)
+				break;
 			change_HP(1);
 			//if (current_health <= max_health) {
 				//current_health += 1.0f;
@@ -163,5 +179,13 @@ public class PlayerController : MonoBehaviour {
 			break;
 
 		}
+	}
+
+	public void incrementLevel() {
+		playerOnLevel++;
+	}
+
+	public int currentLevel() {
+		return playerOnLevel;
 	}
 }
