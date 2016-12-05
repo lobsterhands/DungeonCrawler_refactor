@@ -5,6 +5,9 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	//float smooth = 0.05f; // used for camera lerp
 
+
+	public GameObject HUD;
+	public Slider Health_UI;
 	//stats for player
 	public float speed = 3.0f;
 	public float max_speed = 6.0f; // max speed is really 5
@@ -14,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 	public Slider health_slider;
 	public float max_health = 5.0f;
 	//armor
-	public float start_armor = 0.0f;
+	public float start_armor = 3.0f;
 	public float current_armor;
 	public Slider armor_slider;
 	public float max_armor = 3.0f;
@@ -23,25 +26,30 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody2D body2d;
 	private InputState inputState;
 	// *
-
 	Animator animator;
 	bool running;
 	new public GameObject camera;
-
+	new public GameObject health_bar;
 	// Use this for initialization
 	void Start () {
-
+		//
+		HUD = GameObject.FindGameObjectWithTag ("HUD");
+		Health_UI = HUD.gameObject.GetComponentInChildren<Slider> ();
+		//
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
+		//health_slider = GameObject.FindGameObjectWithTag ("health_slider") as Slider;
 		camera.transform.position = this.transform.position + new Vector3 (0f, 0f, -7.5f);
 		camera.transform.parent = this.transform;
 
 		animator = GetComponent<Animator> ();
-
 		// *new code invalving input scripts
 		body2d = GetComponent<Rigidbody2D> ();
 		inputState = GetComponent<InputState> ();
 		current_health = start_health;
+		//health_slider.value = current_health;
+		Health_UI.value = current_health;
 		current_armor = start_armor;
+		armor_slider.value = current_armor;
 		// *
 	}
 
@@ -67,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 			rotatePlayerX = 180F;
 		}
 
-		animator.SetBool ("Running", running);
+		//animator.SetBool ("Running", running);
 		if (Input.GetKeyDown ("space")) {
 			animator.SetTrigger ("Attack");
 		}
@@ -117,7 +125,15 @@ public class PlayerController : MonoBehaviour {
 		gameObject.transform.rotation = Quaternion.Euler (0, 0, rotatePlayerX);
 		camera.transform.rotation = Quaternion.Euler (0, 0, 0); // Keep child-object camera from rotating
 	}
-
+	void change_HP(float change)
+	{
+		
+		current_health += change;
+		Health_UI.value = current_health;
+		//health_slider.value = current_health;
+		if (current_health > max_health)
+			current_health = 5.0f;
+	}
 	//collision checking
 	void  OnTriggerEnter2D(Collider2D other)
 	{
@@ -130,15 +146,19 @@ public class PlayerController : MonoBehaviour {
 				speed += 1.0f;
 			break;
 		case "Health":
-			other.gameObject.SetActive(false);
-			if(current_health <= max_health)
-				current_health += 1.0f;
-
+			other.gameObject.SetActive (false);
+			change_HP(1);
+			//if (current_health <= max_health) {
+				//current_health += 1.0f;
+				//health_slider.value = current_health;
+			//}	
 			break;
 		case "Armor":
-			other.gameObject.SetActive(false);
-			if(current_armor <= max_armor)
+			other.gameObject.SetActive (false);
+			if (current_armor <= max_armor) {
 				current_armor += 1.0f;
+				armor_slider.value = current_armor;		
+			}
 			break;
 
 		}
