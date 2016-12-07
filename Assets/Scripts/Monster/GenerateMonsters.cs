@@ -88,6 +88,10 @@ public class GenerateMonsters : MonoBehaviour {
 			else {randPoint--;}
 		}//x is even, must be odd to be on a floor tile.
 
+		if (randPoint <= 2) {
+			randPoint = 3;
+		}//dont spawn too close to the starting position of the player
+
 		return randPoint;
 	}//genMonsterRand(2 ints)
 
