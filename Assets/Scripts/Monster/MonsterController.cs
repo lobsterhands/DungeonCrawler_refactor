@@ -20,6 +20,7 @@ public class MonsterController : MonoBehaviour {
 	private Rigidbody2D myRidgidbody;	//Contacting a player
 
 	private GameObject thePlayer;			//Connect the player, so we can check its location/distance
+	private PlayerController playerHealth;
 
 	private Animation myAnimationController;	//the Animation Controller used to animate the model
 	private Animation myAttakAnimController;	//Specificly for attack
@@ -36,6 +37,8 @@ public class MonsterController : MonoBehaviour {
 		myAttakAnimController.wrapMode = WrapMode.Once;
 
 		thePlayer = GameObject.FindGameObjectWithTag ("Player");
+
+		playerHealth = thePlayer.GetComponent<PlayerController> ();
 	}
 	
 	// Update is called once per frame
@@ -149,6 +152,8 @@ public class MonsterController : MonoBehaviour {
 		if (coll.transform.tag == "Player" && timeBetweenAttackCounter == 0.0f) 
 		{
 			myAttakAnimController.Play ("attack1");
+
+			playerHealth.damagePlayer (1); 
 
 			timeBetweenAttackCounter = Random.Range (0.75f, 1.25f);
 		}
