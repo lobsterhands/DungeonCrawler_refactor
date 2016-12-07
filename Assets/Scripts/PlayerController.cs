@@ -15,14 +15,14 @@ public class PlayerController : MonoBehaviour {
 	public float speed = 3.0f;
 	public float max_speed = 6.0f; // max speed is really 5
 	//health
-	public float start_health = 5.0f;
+	public float start_health = 10.0f;
 	public float current_health;
-	public Slider health_slider;
-	public float max_health = 5.0f;
+	//public Slider health_slider;
+	public float max_health = 10.0f;
 	//armor
 	public float start_armor = 3.0f;
 	public float current_armor;
-	public Slider armor_slider;
+	//public Slider armor_slider;
 	public float max_armor = 3.0f;
 	// *new code invalving input scripts
 	public Buttons[] input;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
 		HUD = GameObject.FindGameObjectWithTag ("HUD");
 		//Health_UI = HUD.gameObject.GetComponentInChildren<Slider> ();
 		UI_sliders = HUD.gameObject.GetComponentsInChildren<Slider> (); // UI_sliders[0] = health; [1] = armor
-		UI_texts = HUD.gameObject.GetComponentsInChildren<Text> (); // UI_texts[0] = Level;
+		UI_texts = HUD.gameObject.GetComponentsInChildren<Text> (); // UI_texts[0] = Level;, 1 = HP, 2 = Armor
 
 		//
 		camera = GameObject.FindGameObjectWithTag ("MainCamera");
@@ -57,8 +57,11 @@ public class PlayerController : MonoBehaviour {
 		//health_slider.value = current_health;
 		// Health_UI.value = current_health;
 		current_armor = start_armor;
-		armor_slider.value = current_armor;
+		UI_sliders [1].value = current_armor; 
 		// *
+		UI_texts[0].text = "Level: " + playerOnLevel.ToString();
+		UI_texts[1].text =  current_health.ToString();
+		UI_texts[2].text =  current_armor.ToString();
 	}
 
 	float rotatePlayerX = 0F;
@@ -67,6 +70,8 @@ public class PlayerController : MonoBehaviour {
 		UI_sliders [0].value = current_health;
 		UI_sliders [1].value = current_armor;
 		UI_texts [0].text = "Level: " + playerOnLevel;
+		UI_texts[1].text =  current_health.ToString();
+		UI_texts[2].text =  current_armor.ToString();
 	}
 
 	void FixedUpdate () {
@@ -144,10 +149,21 @@ public class PlayerController : MonoBehaviour {
 	void change_HP(float change)
 	{
 		current_health += change;
-		Health_UI.value = current_health;
-		//health_slider.value = current_health;
+
 		if (current_health > max_health)
-			current_health = 5.0f;
+			current_health = max_health;
+
+		UI_sliders [0].value = current_health;
+	}
+
+	void change_Armor(float change)
+	{
+		current_armor += change;
+
+		if (current_armor > max_armor)
+			current_armor = max_armor;
+
+		UI_sliders [1].value = current_health;
 	}
 
 	//collision checking
@@ -175,7 +191,8 @@ public class PlayerController : MonoBehaviour {
 			other.gameObject.SetActive (false);
 			if (current_armor <= max_armor) {
 				current_armor += 1.0f;
-				armor_slider.value = current_armor;		
+				//armor_slider.value = current_armor;		
+				UI_sliders [0].value = current_armor;
 			}
 			break;
 
@@ -184,9 +201,23 @@ public class PlayerController : MonoBehaviour {
 
 	public void incrementLevel() {
 		playerOnLevel++;
+		max_health += 3;
+		current_health += 2;
+		max_armor += 2;
+		current_armor += 1;
 	}
 
 	public int currentLevel() {
 		return playerOnLevel;
+	}
+
+	public void damagePlayer(int damage){
+		damage *= -1;
+		if (current_armor > 0) {
+			change_Armor (damage);
+		} 
+		else {
+			change_HP (damage);
+		}
 	}
 }
