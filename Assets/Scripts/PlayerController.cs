@@ -59,6 +59,10 @@ public class PlayerController : MonoBehaviour {
 		current_armor = start_armor;
 		armor_slider.value = current_armor;
 		// *
+
+		UI_texts [0].fontSize = 64;
+		UI_texts [0].color = Color.white;
+
 	}
 
 	float rotatePlayerX = 0F;

@@ -8,6 +8,8 @@ public class MonsterController : MonoBehaviour {
 	private Vector3 moveDirection;	//What direction to move in
 	private bool animationPlayed;	//Have we played the animation for the 
 
+	public bool HaroldIsWatching;
+
 
 	public float timeBetweenMove;			//how long to wait between stopping and starting
 	public float timeToMove;				//how long to move
@@ -38,6 +40,11 @@ public class MonsterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (HaroldIsWatching == true) {
+			Debug.Log ("Harold is watching.");
+		}
+
 		//if we have attacked recently, reduce the time till next attack.
 		if (timeBetweenAttackCounter > 0.0f) {
 			timeBetweenAttackCounter -= Time.deltaTime;
