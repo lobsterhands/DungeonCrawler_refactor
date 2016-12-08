@@ -58,17 +58,9 @@ public class PlayerController : MonoBehaviour {
 		// Health_UI.value = current_health;
 		current_armor = start_armor;
 		UI_sliders [1].value = current_armor; 
-		// *
-<<<<<<< HEAD
 
 		UI_texts [0].fontSize = 64;
 		UI_texts [0].color = Color.white;
-
-=======
-		UI_texts[0].text = "Level: " + playerOnLevel.ToString();
-		UI_texts[1].text =  current_health.ToString();
-		UI_texts[2].text =  current_armor.ToString();
->>>>>>> d827bd638744665a84f82c02f430f0630da1f1e6
 	}
 
 	float rotatePlayerX = 0F;
@@ -77,8 +69,8 @@ public class PlayerController : MonoBehaviour {
 		UI_sliders [0].value = current_health;
 		UI_sliders [1].value = current_armor;
 		UI_texts [0].text = "Level: " + playerOnLevel;
-		UI_texts[1].text =  current_health.ToString();
-		UI_texts[2].text =  current_armor.ToString();
+		//UI_texts[1].text =  current_health.ToString();
+		//UI_texts[2].text =  current_armor.ToString();
 	}
 
 	void FixedUpdate () {
