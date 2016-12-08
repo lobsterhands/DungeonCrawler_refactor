@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody2D body2d;
 	private InputState inputState;
 	// *
-	Animator animator;
+	//Animator animator;
 	bool running;
 	new public GameObject camera;
 	new public GameObject health_bar;
@@ -49,19 +49,23 @@ public class PlayerController : MonoBehaviour {
 		camera.transform.position = this.transform.position + new Vector3 (0f, 0f, -7.5f);
 		camera.transform.parent = this.transform;
 
-		animator = GetComponent<Animator> ();
+		//animator = GetComponent<Animator> ();
 		// *new code invalving input scripts
 		body2d = GetComponent<Rigidbody2D> ();
 		inputState = GetComponent<InputState> ();
 		current_health = start_health-2;
+		UI_sliders [0].value = current_health;
+		UI_sliders [0].maxValue = max_health;
 		//health_slider.value = current_health;
 		// Health_UI.value = current_health;
 		current_armor = start_armor;
 		UI_sliders [1].value = current_armor; 
+		UI_sliders [1].maxValue = max_armor;
 		// *
 		UI_texts[0].text = "Level: " + playerOnLevel.ToString();
 		UI_texts[1].text =  current_health.ToString();
 		UI_texts[2].text =  current_armor.ToString();
+		UI_texts[3].text =  "Slaughter Count: " + this.GetComponent<Attack>().monstersKilled.ToString();
 	}
 
 	float rotatePlayerX = 0F;
@@ -72,6 +76,7 @@ public class PlayerController : MonoBehaviour {
 		UI_texts [0].text = "Level: " + playerOnLevel;
 		UI_texts[1].text =  current_health.ToString();
 		UI_texts[2].text =  current_armor.ToString();
+		UI_texts[3].text =  "Slaughter Count: " + this.GetComponent<Attack>().monstersKilled.ToString();
 	}
 
 	void FixedUpdate () {
