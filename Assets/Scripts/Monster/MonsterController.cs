@@ -5,6 +5,7 @@ public class MonsterController : MonoBehaviour {
 
 	public float moveSpeed;			//How fast should it move
 	private bool moving;			//Are We moving
+	private bool following;			//following the player
 	private Vector3 moveDirection;	//What direction to move in
 	private bool animationPlayed;	//Have we played the animation for the 
 
@@ -50,7 +51,18 @@ public class MonsterController : MonoBehaviour {
 			}
 		}
 
-		if (moving) {
+		if (canSeePlayer ()) {
+			moveDirection = thePlayer.transform.position - this.transform.position;
+			timeToMoveCounter *= 5;
+
+			moving = false;
+			following = true;
+		} else if (!canSeePlayer () && following) {
+			following = false;
+		}
+
+
+		if (moving || following) {
 			timeToMoveCounter -= Time.deltaTime;
 			myRidgidbody.velocity = moveDirection;
 
@@ -61,20 +73,33 @@ public class MonsterController : MonoBehaviour {
 				playAnim ("run");
 			}//if(myAnimationController.IsPlaying("walk"))
 
-			if (timeToMoveCounter < 0f) {
-				//Make the model stop moving
-				moving = false;
 
-				//make it stop moving
-				myRidgidbody.velocity = Vector2.zero;
+			if (following) {
+				moveDirection = thePlayer.transform.position - this.transform.position;
+				timeToMoveCounter *= 5;
 
-				//Generate the amount of time to be idle
-				timeBetweenMoveCounter = Random.Range (timeBetweenMove * 0.75f, timeBetweenMove * 1.25f);
+				Vector3 lookdir = moveDirection;
+				lookdir.Normalize ();
+				float rotdir = Mathf.Atan2 (lookdir.z, lookdir.x) * Mathf.Rad2Deg;
+				this.transform.rotation = Quaternion.Euler (0f, rotdir + 45, 0f);
+			} else if (moving) {
+				if (timeToMoveCounter < 0f) {
+					//Make the model stop moving
+					moving = false;
 
-				//Turn off the walk animation
-				myAnimationController.Play("idle");
-			}//if (timeToMoveCounter < 0f)
-		}//if (moving)
+					//make it stop moving
+					myRidgidbody.velocity = Vector2.zero;
+
+					//Generate the amount of time to be idle
+					timeBetweenMoveCounter = Random.Range (timeBetweenMove * 0.75f, timeBetweenMove * 1.25f);
+
+					//Turn off the walk animation
+					myAnimationController.Play("idle");
+				}//if (timeToMoveCounter < 0f)
+			
+			}
+
+		}//if (moving || following)
 		else{
 			//Decrease the amount of time we have left to wait until we can move again
 			timeBetweenMoveCounter -= Time.deltaTime;
@@ -84,15 +109,7 @@ public class MonsterController : MonoBehaviour {
 				moving = true;
 				timeToMoveCounter = Random.Range(timeToMove* 0.6f,timeToMove* 1.3f);
 
-				if (canSeePlayer ()) 
-				{
-					moveDirection = thePlayer.transform.position - this.transform.position;
-					timeToMoveCounter *= 5;
-				} 
-				else 
-				{
-					moveDirection = new Vector3 (Random.Range(-1f,1f)*moveSpeed,Random.Range(-1f,1f)*moveSpeed,0);
-				}
+				moveDirection = new Vector3 (Random.Range(-1f,1f)*moveSpeed,Random.Range(-1f,1f)*moveSpeed,0);
 
 				Vector3 lookdir = moveDirection;
 				lookdir.Normalize ();
