@@ -94,6 +94,7 @@ public class MonsterController : MonoBehaviour {
 				if (canSeePlayer ()) 
 				{
 					moveDirection = thePlayer.transform.position - this.transform.position;
+					timeToMoveCounter *= 5;
 				} 
 				else 
 				{
