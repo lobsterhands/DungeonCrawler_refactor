@@ -76,14 +76,11 @@ public class PlayerController : MonoBehaviour {
 		UI_sliders [0].value = current_health;
 		UI_sliders [1].value = current_armor;
 		UI_texts [0].text = "Level: " + playerOnLevel;
-<<<<<<< HEAD
 		//UI_texts[1].text =  current_health.ToString();
 		//UI_texts[2].text =  current_armor.ToString();
-=======
 		UI_texts[1].text =  current_health.ToString();
 		UI_texts[2].text =  current_armor.ToString();
 		UI_texts[3].text =  "Slaughter Count: " + this.GetComponent<Attack>().monstersKilled.ToString();
->>>>>>> casoncory-master
 	}
 
 	void FixedUpdate () {
