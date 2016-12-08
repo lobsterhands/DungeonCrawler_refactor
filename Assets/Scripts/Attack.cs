@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Attack : MonoBehaviour {
@@ -13,6 +14,10 @@ public class Attack : MonoBehaviour {
 
 	float attackTimer;
 	bool isAttacking;
+	public int monstersKilled = 0;
+
+	//Text[] UI_texts;
+	//public GameObject HUD;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +30,9 @@ public class Attack : MonoBehaviour {
 		playerLHColl.enabled = false;
 		attackTimer = 0f;
 		isAttacking = false;
+
+
+		//UI_texts = HUD.gameObject.GetComponentsInChildren<Text> (); // UI_texts[0] = Level;, 1 = HP, 2 = Armor
 	}
 	
 	// Update is called once per frame
@@ -42,11 +50,18 @@ public class Attack : MonoBehaviour {
 			playerRHColl.enabled = false;
 			playerLHColl.enabled = false;
 		}
+
+		//UI_texts [0].text = "Monster Kills: " + monstersKilled.ToString();
+		//UI_texts [1].text = "Monster Kills: " + monstersKilled.ToString();
+		//UI_texts [2].text = "Monster Kills: " + monstersKilled.ToString();
+		//UI_texts [3].text = "Monster Kills: " + monstersKilled.ToString();
+
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
 		if (collider.tag == "Enemy" || collider.tag == "Player") {
 			Destroy (collider.gameObject);
+			monstersKilled++;
 		}
 	}
 
